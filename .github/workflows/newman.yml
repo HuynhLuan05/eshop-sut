@@ -19,15 +19,22 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          cache-dependency-path: backend/package-lock.json
+          cache-dependency-path: |
+            backend/package-lock.json
+            contract_testing/package-lock.json
 
       - name: Install Backend Dependencies
         run: |
           cd backend
           npm ci
 
-      - name: Install Newman CLI
-        run: npm install -g newman
+      - name: Install Contract Testing Dependencies
+        run: |
+          cd contract_testing
+          npm ci
+
+      - name: Install Newman CLI & htmlextra reporter
+        run: npm install -g newman newman-reporter-htmlextra
 
       - name: Start Backend Server
         run: |
@@ -38,4 +45,20 @@ jobs:
         run: npx wait-on http://localhost:3000/api/products --timeout 15000
 
       - name: Run Newman Tests
-        run: newman run EShop_Collection_v1.json -e EShop_Environment.json
+        run: |
+          mkdir -p reports
+          newman run EShop_Collection_v1.json -e EShop_Environment.json -r cli,htmlextra --reporter-htmlextra-export reports/newman-report.html
+
+      - name: Run Pact Verification
+        if: always()
+        run: |
+          mkdir -p reports
+          cd contract_testing
+          npm run test:provider | tee ../reports/pact-verification-report.txt
+
+      - name: Upload Test Reports as Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: EShop-Test-Reports
+          path: reports/

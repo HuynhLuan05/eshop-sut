@@ -1,0 +1,19 @@
+{
+  "name": "contract_testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test:pact": "jest test/cart.consumer.test.js",
+    "test:provider": "jest test/provider.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@pact-foundation/pact": "^17.0.1",
+    "axios": "^1.18.1",
+    "jest": "^30.4.2"
+  }
+}

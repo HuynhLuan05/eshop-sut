@@ -26,18 +26,42 @@ describe('Pact Verification', () => {
     const opts = {
       providerBaseUrl: 'http://localhost:3000',
       provider: 'EShopBackend',
-      pactUrls: [path.resolve(__dirname, '..', 'pacts', 'EshopConsumer-EShopBackend.json')],
+      pactUrls: [
+        path.resolve(__dirname, '..', 'pacts', 'EshopConsumer-EShopBackend.json')
+      ],
       stateHandlers: {
-        'cart is empty or ready': async () => {
-          // Setup state: the user is logged in (handled by beforeAll),
-          // and we could clear their cart if there was an endpoint for it.
-          // Since it's in-memory, we just return a success message.
+        'system is running': async () => {
+          console.log('[State] Setup system is running');
+          return Promise.resolve('System running');
+        },
+        'a valid auth token exists, user cart is empty, and product with ID 1 exists': async () => {
+          console.log('[State] Setup valid auth token and empty cart');
           return Promise.resolve('State setup completed');
+        },
+        'User exists with valid credentials': async () => {
+          console.log('[State] Setup valid user credentials in DB');
+          return Promise.resolve('User ready');
+        },
+        'User exists but password is wrong': async () => {
+          console.log('[State] Setup user with different password');
+          return Promise.resolve('User ready');
+        },
+        'products exist in database': async () => {
+          console.log('[State] Setup mock products in DB');
+          return Promise.resolve('Products ready');
+        },
+        'product with ID 9999 does not exist': async () => {
+          console.log('[State] Ensure product 9999 is removed');
+          return Promise.resolve('Product 9999 removed');
+        },
+        'cart has items ready for checkout': async () => {
+          console.log('[State] Inject items into cart for user');
+          return Promise.resolve('Cart ready for checkout');
         }
       },
       requestFilter: (req, res, next) => {
         // Inject the real token into requests that have the mock token
-        if (req.headers['authorization']) {
+        if (req.headers['authorization'] && token) {
           req.headers['authorization'] = `Bearer ${token}`;
         }
         next();

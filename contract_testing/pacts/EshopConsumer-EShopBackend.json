@@ -52,6 +52,235 @@
         },
         "status": 201
       }
+    },
+    {
+      "description": "a request to checkout",
+      "providerStates": [
+        {
+          "name": "cart has items ready for checkout"
+        }
+      ],
+      "request": {
+        "body": {
+          "shipping_address": "123 Le Loi, TP.HCM",
+          "total_amount": 200000
+        },
+        "headers": {
+          "Authorization": "Bearer mock-token",
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/checkout"
+      },
+      "response": {
+        "body": {
+          "message": "Checkout successful",
+          "orderId": 101
+        },
+        "headers": {
+          "Content-Type": ""
+        },
+        "matchingRules": {
+          "body": {
+            "$.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.orderId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "{\"generate\":\"application/json\",\"matcher\":\"^application/json.*\"}"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to get a non-existent product",
+      "providerStates": [
+        {
+          "name": "product with ID 9999 does not exist"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/products/9999"
+      },
+      "response": {
+        "body": {
+          "error": "Product not found"
+        },
+        "headers": {
+          "Content-Type": ""
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "{\"generate\":\"application/json\",\"matcher\":\"^application/json.*\"}"
+                }
+              ]
+            }
+          }
+        },
+        "status": 404
+      }
+    },
+    {
+      "description": "a request to get all products",
+      "providerStates": [
+        {
+          "name": "products exist in database"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/products"
+      },
+      "response": {
+        "body": [
+          {
+            "id": 1,
+            "name": "iPhone 15",
+            "price": 25000000
+          }
+        ],
+        "headers": {
+          "Content-Type": ""
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$[*].id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$[*].name": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$[*].price": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "{\"generate\":\"application/json\",\"matcher\":\"^application/json.*\"}"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to login with wrong password",
+      "providerStates": [
+        {
+          "name": "User exists but password is wrong"
+        }
+      ],
+      "request": {
+        "body": {
+          "email": "test@eshop.com",
+          "password": "WrongPass!"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/login"
+      },
+      "response": {
+        "body": {
+          "error": "Invalid email or password"
+        },
+        "headers": {
+          "Content-Type": ""
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "{\"generate\":\"application/json\",\"matcher\":\"^application/json.*\"}"
+                }
+              ]
+            }
+          }
+        },
+        "status": 401
+      }
     }
   ],
   "metadata": {

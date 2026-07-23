@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:pact": "jest --testPathPattern=consumer.test.js",
+    "test:pact": "jest consumer.test.js",
     "test:provider": "jest test/provider.test.js"
   },
   "keywords": [],

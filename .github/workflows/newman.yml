@@ -36,6 +36,11 @@ jobs:
       - name: Install Newman CLI & htmlextra reporter
         run: npm install -g newman newman-reporter-htmlextra
 
+      - name: Run Pact Consumer Tests
+        run: |
+          cd contract_testing
+          npm run test:pact
+
       - name: Start Backend Server
         run: |
           cd backend
@@ -47,7 +52,7 @@ jobs:
       - name: Run Newman Tests
         run: |
           mkdir -p reports
-          newman run EShop_Collection_v1.json -e EShop_Environment.json -r cli,htmlextra --reporter-htmlextra-export reports/newman-report.html
+          newman run EShop_Collection_v2.json -e EShop_Environment.json -r cli,htmlextra --reporter-htmlextra-export reports/newman-report.html
 
       - name: Run Pact Verification
         if: always()

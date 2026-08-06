@@ -46,13 +46,32 @@ describe('Pact Verification', () => {
           console.log('[State] Setup user with different password');
           return Promise.resolve('User ready');
         },
+        'Email does not exist': async () => {
+          console.log('[State] Setup email does not exist');
+          return Promise.resolve('DB ready');
+        },
+        'Account is locked': async () => {
+          console.log('[State] Setup locked account');
+          await axios.post('http://localhost:3000/api/register', { name: 'Locked User', email: 'locked@eshop.com', password: 'Test1234!' }).catch(() => {});
+          await axios.post('http://localhost:3000/api/login', { email: 'locked@eshop.com', password: 'wrong' }).catch(() => {});
+          await axios.post('http://localhost:3000/api/login', { email: 'locked@eshop.com', password: 'wrong' }).catch(() => {});
+          return Promise.resolve('Account locked');
+        },
         'products exist in database': async () => {
           console.log('[State] Setup mock products in DB');
           return Promise.resolve('Products ready');
         },
-        'product with ID 9999 does not exist': async () => {
-          console.log('[State] Ensure product 9999 is removed');
-          return Promise.resolve('Product 9999 removed');
+        'product with ID 1 exists': async () => {
+          console.log('[State] Setup product ID 1 in DB');
+          return Promise.resolve('Product 1 ready');
+        },
+        'product with ID 2 exists': async () => {
+          console.log('[State] Setup product ID 2 in DB');
+          return Promise.resolve('Product 2 ready');
+        },
+        'product with ID 99999 does not exist': async () => {
+          console.log('[State] Ensure product 99999 is removed');
+          return Promise.resolve('Product 99999 removed');
         },
         'cart has items ready for checkout': async () => {
           console.log('[State] Inject items into cart for user');
@@ -61,7 +80,7 @@ describe('Pact Verification', () => {
       },
       requestFilter: (req, res, next) => {
         // Inject the real token into requests that have the mock token
-        if (req.headers['authorization'] && token) {
+        if (req.headers['authorization'] && req.headers['authorization'].includes('mock-token') && token) {
           req.headers['authorization'] = `Bearer ${token}`;
         }
         next();

@@ -67,7 +67,7 @@ describe('POST /api/cart', () => {
         method: 'POST',
         path: '/api/cart',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': regex({ generate: 'application/json', matcher: '^application/json.*' }),
         },
         body: {
           id: 1,

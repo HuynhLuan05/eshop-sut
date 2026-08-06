@@ -12,6 +12,8 @@ const provider = new PactV3({
   logLevel: process.env.PACT_LOG_LEVEL || 'info',
 });
 
+// Demo CI/CD
+
 describe('POST /api/login', () => {
   it('returns 200 and a token when credentials are valid', async () => {
     provider.addInteraction({

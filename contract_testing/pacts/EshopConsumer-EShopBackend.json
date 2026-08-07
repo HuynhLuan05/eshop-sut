@@ -1,0 +1,1622 @@
+{
+  "consumer": {
+    "name": "EshopConsumer"
+  },
+  "interactions": [
+    {
+      "description": "a request to add item to cart",
+      "providerStates": [
+        {
+          "name": "a valid auth token exists, user cart is empty, and product with ID 1 exists"
+        }
+      ],
+      "request": {
+        "body": {
+          "id": 1,
+          "name": "iPhone 15 Pro Max",
+          "price": 30000000,
+          "quantity": 2
+        },
+        "headers": {
+          "Authorization": "Bearer mock-token",
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/cart"
+      },
+      "response": {
+        "body": {
+          "message": "Added to cart"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to add item to cart with empty body",
+      "providerStates": [
+        {
+          "name": "a valid auth token exists, user cart is empty, and product with ID 1 exists"
+        }
+      ],
+      "request": {
+        "body": {},
+        "headers": {
+          "Authorization": "Bearer mock-token",
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/cart"
+      },
+      "response": {
+        "body": {
+          "message": "Added to cart"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to add item to cart with invalid token",
+      "providerStates": [
+        {
+          "name": "system is running"
+        }
+      ],
+      "request": {
+        "body": {
+          "id": 1,
+          "name": "Test",
+          "price": 100,
+          "quantity": 1
+        },
+        "headers": {
+          "Authorization": "Bearer INVALID_TOKEN_123",
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/cart"
+      },
+      "response": {
+        "body": {
+          "error": "Forbidden"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 403
+      }
+    },
+    {
+      "description": "a request to add item to cart with missing fields",
+      "providerStates": [
+        {
+          "name": "a valid auth token exists, user cart is empty, and product with ID 1 exists"
+        }
+      ],
+      "request": {
+        "body": {
+          "name": "Test"
+        },
+        "headers": {
+          "Authorization": "Bearer mock-token",
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/cart"
+      },
+      "response": {
+        "body": {
+          "message": "Added to cart"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to add item to cart with negative quantity",
+      "providerStates": [
+        {
+          "name": "a valid auth token exists, user cart is empty, and product with ID 1 exists"
+        }
+      ],
+      "request": {
+        "body": {
+          "id": 1,
+          "name": "Test",
+          "price": 100,
+          "quantity": -1
+        },
+        "headers": {
+          "Authorization": "Bearer mock-token",
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/cart"
+      },
+      "response": {
+        "body": {
+          "message": "Added to cart"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to add item to cart without auth token",
+      "providerStates": [
+        {
+          "name": "system is running"
+        }
+      ],
+      "request": {
+        "body": {
+          "id": 1,
+          "name": "Test",
+          "price": 100,
+          "quantity": 1
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "method": "POST",
+        "path": "/api/cart"
+      },
+      "response": {
+        "body": {
+          "error": "Unauthorized"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 401
+      }
+    },
+    {
+      "description": "a request to checkout",
+      "providerStates": [
+        {
+          "name": "cart has items ready for checkout"
+        }
+      ],
+      "request": {
+        "body": {
+          "shipping_address": "123 Le Loi, TP.HCM",
+          "total_amount": 200000
+        },
+        "headers": {
+          "Authorization": "Bearer mock-token",
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/checkout"
+      },
+      "response": {
+        "body": {
+          "message": "Checkout successful",
+          "orderId": 101
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.orderId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to checkout missing shipping_address",
+      "providerStates": [
+        {
+          "name": "cart has items ready for checkout"
+        }
+      ],
+      "request": {
+        "body": {
+          "total_amount": 100000
+        },
+        "headers": {
+          "Authorization": "Bearer mock-token",
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/checkout"
+      },
+      "response": {
+        "body": {},
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to checkout with empty body",
+      "providerStates": [
+        {
+          "name": "cart has items ready for checkout"
+        }
+      ],
+      "request": {
+        "body": {},
+        "headers": {
+          "Authorization": "Bearer mock-token",
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/checkout"
+      },
+      "response": {
+        "body": {},
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to checkout with negative total_amount",
+      "providerStates": [
+        {
+          "name": "cart has items ready for checkout"
+        }
+      ],
+      "request": {
+        "body": {
+          "shipping_address": "...",
+          "total_amount": -50000
+        },
+        "headers": {
+          "Authorization": "Bearer mock-token",
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/checkout"
+      },
+      "response": {
+        "body": {},
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to checkout without token",
+      "providerStates": [
+        {
+          "name": "system is running"
+        }
+      ],
+      "request": {
+        "body": {
+          "shipping_address": "...",
+          "total_amount": 200000
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/checkout"
+      },
+      "response": {
+        "body": {
+          "error": "Unauthorized"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 401
+      }
+    },
+    {
+      "description": "a request to get a non-existent product",
+      "providerStates": [
+        {
+          "name": "product with ID 99999 does not exist"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/products/99999"
+      },
+      "response": {
+        "body": {},
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to get a product with string ID abc",
+      "providerStates": [
+        {
+          "name": "system is running"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/products/abc"
+      },
+      "response": {
+        "body": {},
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to get all products",
+      "providerStates": [
+        {
+          "name": "products exist in database"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/products"
+      },
+      "response": {
+        "body": [
+          {
+            "id": 1,
+            "name": "iPhone 15",
+            "price": 25000000
+          }
+        ],
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$[*].id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$[*].name": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$[*].price": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to get product details for even ID",
+      "providerStates": [
+        {
+          "name": "product with ID 2 exists"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/products/2"
+      },
+      "response": {
+        "body": {
+          "id": 2,
+          "name": "Samsung S24",
+          "price": "20000000"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.name": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.price": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to get product details for odd ID",
+      "providerStates": [
+        {
+          "name": "product with ID 1 exists"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/products/1"
+      },
+      "response": {
+        "body": {
+          "id": 1,
+          "name": "iPhone 15",
+          "price": 25000000
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.name": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.price": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to login to a locked account",
+      "providerStates": [
+        {
+          "name": "Account is locked"
+        }
+      ],
+      "request": {
+        "body": {
+          "email": "locked@eshop.com",
+          "password": "Test1234!"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/login"
+      },
+      "response": {
+        "body": {
+          "error": "Tài khoản đã bị khóa. Vui lòng thử lại sau."
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 403
+      }
+    },
+    {
+      "description": "a request to login with empty body",
+      "providerStates": [
+        {
+          "name": "system is running"
+        }
+      ],
+      "request": {
+        "body": {},
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/login"
+      },
+      "response": {
+        "body": {
+          "error": "Missing required fields"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 401
+      }
+    },
+    {
+      "description": "a request to login with missing email",
+      "providerStates": [
+        {
+          "name": "system is running"
+        }
+      ],
+      "request": {
+        "body": {
+          "password": "Test1234!"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/login"
+      },
+      "response": {
+        "body": {
+          "error": "Missing required fields"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 401
+      }
+    },
+    {
+      "description": "a request to login with missing password",
+      "providerStates": [
+        {
+          "name": "system is running"
+        }
+      ],
+      "request": {
+        "body": {
+          "email": "test@eshop.com"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/login"
+      },
+      "response": {
+        "body": {
+          "error": "Missing required fields"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 401
+      }
+    },
+    {
+      "description": "a request to login with non-existent email",
+      "providerStates": [
+        {
+          "name": "Email does not exist"
+        }
+      ],
+      "request": {
+        "body": {
+          "email": "noexist@eshop.com",
+          "password": "any"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/login"
+      },
+      "response": {
+        "body": {
+          "error": "Invalid email or password"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 401
+      }
+    },
+    {
+      "description": "a request to login with valid credentials",
+      "providerStates": [
+        {
+          "name": "User exists with valid credentials"
+        }
+      ],
+      "request": {
+        "body": {
+          "email": "test@eshop.com",
+          "password": "Test1234!"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/login"
+      },
+      "response": {
+        "body": {
+          "message": "Login successful",
+          "token": "mocked-jwt-token"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.token": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to login with wrong password",
+      "providerStates": [
+        {
+          "name": "User exists but password is wrong"
+        }
+      ],
+      "request": {
+        "body": {
+          "email": "test@eshop.com",
+          "password": "WrongPass!"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/login"
+      },
+      "response": {
+        "body": {
+          "error": "Invalid email or password"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 401
+      }
+    },
+    {
+      "description": "a request to search products by name iPhone",
+      "providerStates": [
+        {
+          "name": "products exist in database"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/products",
+        "query": {
+          "search": [
+            "iPhone"
+          ]
+        }
+      },
+      "response": {
+        "body": [
+          {
+            "id": 1,
+            "name": "iPhone 15",
+            "price": 25000000
+          }
+        ],
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$[*].id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$[*].name": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$[*].price": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to checkout",
+      "providerStates": [
+        {
+          "name": "cart has items ready for checkout"
+        }
+      ],
+      "request": {
+        "body": {
+          "shipping_address": "123 Le Loi, TP.HCM",
+          "total_amount": 200000
+        },
+        "headers": {
+          "Authorization": "Bearer mock-token",
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/checkout"
+      },
+      "response": {
+        "body": {
+          "message": "Checkout successful",
+          "orderId": 101
+        },
+        "headers": {
+          "Content-Type": ""
+        },
+        "matchingRules": {
+          "body": {
+            "$.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.orderId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "{\"generate\":\"application/json\",\"matcher\":\"^application/json.*\"}"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to get a non-existent product",
+      "providerStates": [
+        {
+          "name": "product with ID 9999 does not exist"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/products/9999"
+      },
+      "response": {
+        "body": {
+          "error": "Product not found"
+        },
+        "headers": {
+          "Content-Type": ""
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "{\"generate\":\"application/json\",\"matcher\":\"^application/json.*\"}"
+                }
+              ]
+            }
+          }
+        },
+        "status": 404
+      }
+    },
+    {
+      "description": "a request to get all products",
+      "providerStates": [
+        {
+          "name": "products exist in database"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/products"
+      },
+      "response": {
+        "body": [
+          {
+            "id": 1,
+            "name": "iPhone 15",
+            "price": 25000000
+          }
+        ],
+        "headers": {
+          "Content-Type": ""
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$[*].id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$[*].name": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$[*].price": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "{\"generate\":\"application/json\",\"matcher\":\"^application/json.*\"}"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to login with wrong password",
+      "providerStates": [
+        {
+          "name": "User exists but password is wrong"
+        }
+      ],
+      "request": {
+        "body": {
+          "email": "test@eshop.com",
+          "password": "WrongPass!"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/login"
+      },
+      "response": {
+        "body": {
+          "error": "Invalid email or password"
+        },
+        "headers": {
+          "Content-Type": ""
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "{\"generate\":\"application/json\",\"matcher\":\"^application/json.*\"}"
+                }
+              ]
+            }
+          }
+        },
+        "status": 401
+      }
+    },
+    {
+      "description": "a request to search products with empty query",
+      "providerStates": [
+        {
+          "name": "products exist in database"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/products",
+        "query": {
+          "search": [
+            ""
+          ]
+        }
+      },
+      "response": {
+        "body": [
+          {
+            "id": 1,
+            "name": "iPhone 15",
+            "price": 25000000
+          }
+        ],
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$[*].id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$[*].name": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$[*].price": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to search products with no results",
+      "providerStates": [
+        {
+          "name": "products exist in database"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/products",
+        "query": {
+          "search": [
+            "XYZNONEXIST"
+          ]
+        }
+      },
+      "response": {
+        "body": [],
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "17.0.1"
+    },
+    "pactRust": {
+      "ffi": "0.5.4",
+      "models": "1.3.11"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "EShopBackend"
+  }
+}

@@ -153,7 +153,7 @@ describe('POST /api/cart', () => {
     });
   });
 
-  it('returns 200 when body is empty (Bug)', async () => {
+  it('returns 400 when body is empty (Bug)', async () => {
     provider.addInteraction({
       states: [{ description: 'a valid auth token exists, user cart is empty, and product with ID 1 exists' }],
       uponReceiving: 'a request to add item to cart with empty body',
@@ -167,33 +167,36 @@ describe('POST /api/cart', () => {
         body: {},
       },
       willRespondWith: {
-        status: 200,
+        status: 400,
         headers: {
           'Content-Type': regex('^application/json.*', 'application/json'),
         },
         body: {
-          message: MatchersV3.like('Added to cart'),
+          error: MatchersV3.string('Missing required fields'),
         },
       },
     });
 
     await provider.executeTest(async (mockServer) => {
-      const response = await axios.post(
-        `${mockServer.url}/api/cart`,
-        {},
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer mock-token',
-          },
-        }
-      );
-      expect(response.status).toEqual(200);
-      expect(response.data.message).toEqual("Added to cart");
+      try {
+        await axios.post(
+          `${mockServer.url}/api/cart`,
+          {},
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer mock-token',
+            },
+          }
+        );
+      } catch (error) {
+        expect(error.response.status).toEqual(400);
+        expect(error.response.data).toHaveProperty('error');
+      }
     });
   });
 
-  it('returns 200 when missing required fields (Bug)', async () => {
+  it('returns 400 when missing required fields (Bug)', async () => {
     provider.addInteraction({
       states: [{ description: 'a valid auth token exists, user cart is empty, and product with ID 1 exists' }],
       uponReceiving: 'a request to add item to cart with missing fields',
@@ -209,32 +212,36 @@ describe('POST /api/cart', () => {
         },
       },
       willRespondWith: {
-        status: 200,
+        status: 400,
         headers: {
           'Content-Type': regex('^application/json.*', 'application/json'),
         },
         body: {
-          message: MatchersV3.like('Added to cart'),
+          error: MatchersV3.string('Missing required fields'),
         },
       },
     });
 
     await provider.executeTest(async (mockServer) => {
-      const response = await axios.post(
-        `${mockServer.url}/api/cart`,
-        { name: "Test" },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer mock-token',
-          },
-        }
-      );
-      expect(response.status).toEqual(200);
+      try {
+        await axios.post(
+          `${mockServer.url}/api/cart`,
+          { name: "Test" },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer mock-token',
+            },
+          }
+        );
+      } catch (error) {
+        expect(error.response.status).toEqual(400);
+        expect(error.response.data).toHaveProperty('error');
+      }
     });
   });
 
-  it('returns 200 when quantity is negative or zero (Bug)', async () => {
+  it('returns 400 when quantity is negative or zero (Bug)', async () => {
     provider.addInteraction({
       states: [{ description: 'a valid auth token exists, user cart is empty, and product with ID 1 exists' }],
       uponReceiving: 'a request to add item to cart with negative quantity',
@@ -253,28 +260,32 @@ describe('POST /api/cart', () => {
         },
       },
       willRespondWith: {
-        status: 200,
+        status: 400,
         headers: {
           'Content-Type': regex('^application/json.*', 'application/json'),
         },
         body: {
-          message: MatchersV3.like('Added to cart'),
+          error: MatchersV3.string('Invalid quantity'),
         },
       },
     });
 
     await provider.executeTest(async (mockServer) => {
-      const response = await axios.post(
-        `${mockServer.url}/api/cart`,
-        { id: 1, name: "Test", price: 100, quantity: -1 },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer mock-token',
-          },
-        }
-      );
-      expect(response.status).toEqual(200);
+      try {
+        await axios.post(
+          `${mockServer.url}/api/cart`,
+          { id: 1, name: "Test", price: 100, quantity: -1 },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer mock-token',
+            },
+          }
+        );
+      } catch (error) {
+        expect(error.response.status).toEqual(400);
+        expect(error.response.data).toHaveProperty('error');
+      }
     });
   });
 });

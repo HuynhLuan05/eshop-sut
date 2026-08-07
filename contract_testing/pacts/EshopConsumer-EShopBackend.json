@@ -234,14 +234,14 @@
       },
       "response": {
         "body": {
-          "message": "Added to cart"
+          "error": "Invalid quantity"
         },
         "headers": {
           "Content-Type": "application/json"
         },
         "matchingRules": {
           "body": {
-            "$.message": {
+            "$.error": {
               "combine": "AND",
               "matchers": [
                 {
@@ -262,7 +262,7 @@
             }
           }
         },
-        "status": 200
+        "status": 400
       }
     },
     {
@@ -411,11 +411,23 @@
         "path": "/api/checkout"
       },
       "response": {
-        "body": {},
+        "body": {
+          "error": "Missing required fields"
+        },
         "headers": {
           "Content-Type": "application/json"
         },
         "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
           "header": {
             "Content-Type": {
               "combine": "AND",
@@ -428,7 +440,58 @@
             }
           }
         },
-        "status": 200
+        "status": 400
+      }
+    },
+    {
+      "description": "a request to checkout missing total_amount",
+      "providerStates": [
+        {
+          "name": "cart has items ready for checkout"
+        }
+      ],
+      "request": {
+        "body": {
+          "shipping_address": "123 ABC"
+        },
+        "headers": {
+          "Authorization": "Bearer mock-token",
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/checkout"
+      },
+      "response": {
+        "body": {
+          "error": "Missing required fields"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^application/json.*"
+                }
+              ]
+            }
+          }
+        },
+        "status": 400
       }
     },
     {
@@ -448,11 +511,23 @@
         "path": "/api/checkout"
       },
       "response": {
-        "body": {},
+        "body": {
+          "error": "Missing required fields"
+        },
         "headers": {
           "Content-Type": "application/json"
         },
         "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
           "header": {
             "Content-Type": {
               "combine": "AND",
@@ -465,7 +540,7 @@
             }
           }
         },
-        "status": 200
+        "status": 400
       }
     },
     {
@@ -488,11 +563,23 @@
         "path": "/api/checkout"
       },
       "response": {
-        "body": {},
+        "body": {
+          "error": "Invalid total_amount"
+        },
         "headers": {
           "Content-Type": "application/json"
         },
         "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
           "header": {
             "Content-Type": {
               "combine": "AND",
@@ -505,7 +592,7 @@
             }
           }
         },
-        "status": 200
+        "status": 400
       }
     },
     {
@@ -571,11 +658,23 @@
         "path": "/api/products/99999"
       },
       "response": {
-        "body": {},
+        "body": {
+          "error": "Product not found"
+        },
         "headers": {
           "Content-Type": "application/json"
         },
         "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
           "header": {
             "Content-Type": {
               "combine": "AND",
@@ -588,7 +687,7 @@
             }
           }
         },
-        "status": 200
+        "status": 404
       }
     },
     {
@@ -603,11 +702,23 @@
         "path": "/api/products/abc"
       },
       "response": {
-        "body": {},
+        "body": {
+          "error": "Invalid ID format"
+        },
         "headers": {
           "Content-Type": "application/json"
         },
         "matchingRules": {
+          "body": {
+            "$.error": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
           "header": {
             "Content-Type": {
               "combine": "AND",
@@ -620,7 +731,7 @@
             }
           }
         },
-        "status": 200
+        "status": 400
       }
     },
     {
@@ -711,7 +822,7 @@
         "body": {
           "id": 2,
           "name": "Samsung S24",
-          "price": "20000000"
+          "price": 20000000
         },
         "headers": {
           "Content-Type": "application/json"
@@ -738,7 +849,7 @@
               "combine": "AND",
               "matchers": [
                 {
-                  "match": "type"
+                  "match": "number"
                 }
               ]
             }

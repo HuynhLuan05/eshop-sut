@@ -108,7 +108,7 @@ describe('POST /api/login', () => {
     });
   });
 
-  it('returns 401 when email field is missing', async () => {
+  it('returns 400 when email field is missing', async () => {
     provider.addInteraction({
       states: [{ description: 'system is running' }],
       uponReceiving: 'a request to login with missing email',
@@ -119,7 +119,7 @@ describe('POST /api/login', () => {
         body: { password: 'Test1234!' },
       },
       willRespondWith: {
-        status: 401,
+        status: 400,
         headers: { 'Content-Type': regex('^application/json.*', 'application/json') },
         body: {
           error: MatchersV3.string('Missing required fields'),
@@ -133,13 +133,13 @@ describe('POST /api/login', () => {
           password: 'Test1234!',
         });
       } catch (error) {
-        expect(error.response.status).toEqual(401);
+        expect(error.response.status).toEqual(400);
         expect(error.response.data).toHaveProperty('error');
       }
     });
   });
 
-  it('returns 401 when password field is missing', async () => {
+  it('returns 400 when password field is missing', async () => {
     provider.addInteraction({
       states: [{ description: 'system is running' }],
       uponReceiving: 'a request to login with missing password',
@@ -150,7 +150,7 @@ describe('POST /api/login', () => {
         body: { email: 'test@eshop.com' },
       },
       willRespondWith: {
-        status: 401,
+        status: 400,
         headers: { 'Content-Type': regex('^application/json.*', 'application/json') },
         body: {
           error: MatchersV3.string('Missing required fields'),
@@ -164,13 +164,13 @@ describe('POST /api/login', () => {
           email: 'test@eshop.com',
         });
       } catch (error) {
-        expect(error.response.status).toEqual(401);
+        expect(error.response.status).toEqual(400);
         expect(error.response.data).toHaveProperty('error');
       }
     });
   });
 
-  it('returns 401 when body is empty', async () => {
+  it('returns 400 when body is empty', async () => {
     provider.addInteraction({
       states: [{ description: 'system is running' }],
       uponReceiving: 'a request to login with empty body',
@@ -181,7 +181,7 @@ describe('POST /api/login', () => {
         body: {},
       },
       willRespondWith: {
-        status: 401,
+        status: 400,
         headers: { 'Content-Type': regex('^application/json.*', 'application/json') },
         body: {
           error: MatchersV3.string('Missing required fields'),
@@ -193,7 +193,7 @@ describe('POST /api/login', () => {
       try {
         await axios.post(`${mockServer.url}/api/login`, {});
       } catch (error) {
-        expect(error.response.status).toEqual(401);
+        expect(error.response.status).toEqual(400);
         expect(error.response.data).toHaveProperty('error');
       }
     });

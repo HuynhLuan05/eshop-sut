@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "EShop Collection v2",
-    "description": "API Test collection cho dự án EShop (Tuần 2) với Negative và Edge cases",
+    "name": "EShop Collection v3",
+    "description": "API Test collection cho dự án EShop (Tuần 2) với Negative, Edge cases và Expected Behavior Assertions",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -453,7 +453,7 @@
           }
         },
         {
-          "name": "3.2 Edge/Bug — ID chẵn (price trả về string)",
+          "name": "3.2 Edge — ID chẵn (price should be number)",
           "event": [
             {
               "listen": "test",
@@ -461,7 +461,7 @@
                 "exec": [
                   "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
                   "pm.test(\"ID is correct\", function () { var jsonData = pm.response.json(); pm.expect(jsonData.id).to.eql(2); });",
-                  "pm.test(\"Bug Ghi Nhận: Price is string instead of number\", function () { var jsonData = pm.response.json(); pm.expect(jsonData.price).to.be.a('string'); });"
+                  "pm.test(\"Price should be a number\", function () { var jsonData = pm.response.json(); pm.expect(jsonData.price).to.be.a('number'); });"
                 ],
                 "type": "text/javascript"
               }
@@ -490,8 +490,8 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Status code is 200 (Bug)\", function () { pm.response.to.have.status(200); });",
-                  "pm.test(\"Body is empty object\", function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.be.an('object').that.is.empty; });"
+                  "pm.test(\"Status code is 404 (Expected)\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"Error message exists\", function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.have.property('error'); });"
                 ],
                 "type": "text/javascript"
               }
@@ -520,7 +520,8 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Record behavior\", function () { console.log(pm.response.json()); });"
+                  "pm.test(\"Status code is 400 (Expected)\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Error message exists\", function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.have.property('error'); });"
                 ],
                 "type": "text/javascript"
               }
@@ -675,14 +676,14 @@
           }
         },
         {
-          "name": "4.4 Edge — Body rỗng (vẫn add được — no validation)",
+          "name": "4.4 Edge — Body rỗng",
           "event": [
             {
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Status code is 200 (Bug)\", function () { pm.response.to.have.status(200); });",
-                  "pm.test(\"Message is 'Added to cart'\", function () { var jsonData = pm.response.json(); pm.expect(jsonData.message).to.eql('Added to cart'); });"
+                  "pm.test(\"Status code is 400 (Expected)\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Error message exists\", function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.have.property('error'); });"
                 ],
                 "type": "text/javascript"
               }
@@ -719,7 +720,8 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Status code is 200 (Bug)\", function () { pm.response.to.have.status(200); });"
+                  "pm.test(\"Status code is 400 (Expected)\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Error message exists\", function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.have.property('error'); });"
                 ],
                 "type": "text/javascript"
               }
@@ -756,7 +758,8 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Status code is 200 (Bug)\", function () { pm.response.to.have.status(200); });"
+                  "pm.test(\"Status code is 400 (Expected)\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Error message exists\", function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.have.property('error'); });"
                 ],
                 "type": "text/javascript"
               }
@@ -926,7 +929,8 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Record behavior\", function () { console.log(pm.response.json()); });"
+                  "pm.test(\"Status code is 400 (Expected)\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Error message exists\", function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.have.property('error'); });"
                 ],
                 "type": "text/javascript"
               }
@@ -963,7 +967,8 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Record behavior\", function () { console.log(pm.response.json()); });"
+                  "pm.test(\"Status code is 400 (Expected)\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Error message exists\", function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.have.property('error'); });"
                 ],
                 "type": "text/javascript"
               }
@@ -1000,7 +1005,8 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Record behavior\", function () { console.log(pm.response.json()); });"
+                  "pm.test(\"Status code is 400 (Expected)\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Error message exists\", function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.have.property('error'); });"
                 ],
                 "type": "text/javascript"
               }
@@ -1037,7 +1043,8 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Record behavior\", function () { console.log(pm.response.json()); });"
+                  "pm.test(\"Status code is 400 (Expected)\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Error message exists\", function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.have.property('error'); });"
                 ],
                 "type": "text/javascript"
               }

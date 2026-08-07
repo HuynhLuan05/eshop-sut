@@ -162,7 +162,7 @@ describe('GET /api/products', () => {
         body: {
           id: integer(2),
           name: string('Samsung S24'),
-          price: string('20000000'), // Bug in server: returns string
+          price: number(20000000), // Enforce number type despite bug in server
         },
       },
     });
@@ -171,11 +171,11 @@ describe('GET /api/products', () => {
       const response = await axios.get(`${mockServer.url}/api/products/2`);
       expect(response.status).toEqual(200);
       expect(response.data.id).toEqual(2);
-      expect(typeof response.data.price).toBe('string');
+      expect(typeof response.data.price).toBe('number');
     });
   });
 
-  it('returns 200 and empty object when ID does not exist (Bug)', async () => {
+  it('returns 404 when ID does not exist (Bug)', async () => {
     provider.addInteraction({
       states: [{ description: 'product with ID 99999 does not exist' }],
       uponReceiving: 'a request to get a non-existent product',
@@ -184,20 +184,25 @@ describe('GET /api/products', () => {
         path: '/api/products/99999',
       },
       willRespondWith: {
-        status: 200, // Bug: should be 404
+        status: 404,
         headers: { 'Content-Type': regex('^application/json.*', 'application/json') },
-        body: {},
+        body: {
+          error: MatchersV3.string('Product not found'),
+        },
       },
     });
 
     await provider.executeTest(async (mockServer) => {
-      const response = await axios.get(`${mockServer.url}/api/products/99999`);
-      expect(response.status).toEqual(200);
-      expect(response.data).toEqual({});
+      try {
+        await axios.get(`${mockServer.url}/api/products/99999`);
+      } catch (error) {
+        expect(error.response.status).toEqual(404);
+        expect(error.response.data).toHaveProperty('error');
+      }
     });
   });
 
-  it('handles invalid string ID', async () => {
+  it('returns 400 when ID is invalid string', async () => {
     provider.addInteraction({
       states: [{ description: 'system is running' }],
       uponReceiving: 'a request to get a product with string ID abc',
@@ -206,15 +211,21 @@ describe('GET /api/products', () => {
         path: '/api/products/abc',
       },
       willRespondWith: {
-        status: 200, // Assuming server behaves the same as non-existent ID or has a bug
+        status: 400,
         headers: { 'Content-Type': regex('^application/json.*', 'application/json') },
-        body: {},
+        body: {
+          error: MatchersV3.string('Invalid ID format'),
+        },
       },
     });
 
     await provider.executeTest(async (mockServer) => {
-      const response = await axios.get(`${mockServer.url}/api/products/abc`);
-      expect(response.status).toEqual(200);
+      try {
+        await axios.get(`${mockServer.url}/api/products/abc`);
+      } catch (error) {
+        expect(error.response.status).toEqual(400);
+        expect(error.response.data).toHaveProperty('error');
+      }
     });
   });
 });

@@ -154,24 +154,30 @@ describe('POST /api/checkout', () => {
         },
       },
       willRespondWith: {
-        status: 200, // Assuming server processes it or bug
+        status: 400,
         headers: { 'Content-Type': regex('^application/json.*', 'application/json') },
-        body: {},
+        body: {
+          error: MatchersV3.string('Missing required fields'),
+        },
       },
     });
 
     await provider.executeTest(async (mockServer) => {
-      const response = await axios.post(
-        `${mockServer.url}/api/checkout`,
-        { shipping_address: '123 ABC' },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer mock-token',
-          },
-        }
-      );
-      expect(response.status).toEqual(200);
+      try {
+        await axios.post(
+          `${mockServer.url}/api/checkout`,
+          { shipping_address: '123 ABC' },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer mock-token',
+            },
+          }
+        );
+      } catch (error) {
+        expect(error.response.status).toEqual(400);
+        expect(error.response.data).toHaveProperty('error');
+      }
     });
   });
 
@@ -191,24 +197,30 @@ describe('POST /api/checkout', () => {
         },
       },
       willRespondWith: {
-        status: 200, // Assuming bug or unhandled
+        status: 400,
         headers: { 'Content-Type': regex('^application/json.*', 'application/json') },
-        body: {},
+        body: {
+          error: MatchersV3.string('Missing required fields'),
+        },
       },
     });
 
     await provider.executeTest(async (mockServer) => {
-      const response = await axios.post(
-        `${mockServer.url}/api/checkout`,
-        { total_amount: 100000 },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer mock-token',
-          },
-        }
-      );
-      expect(response.status).toEqual(200);
+      try {
+        await axios.post(
+          `${mockServer.url}/api/checkout`,
+          { total_amount: 100000 },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer mock-token',
+            },
+          }
+        );
+      } catch (error) {
+        expect(error.response.status).toEqual(400);
+        expect(error.response.data).toHaveProperty('error');
+      }
     });
   });
 
@@ -226,24 +238,30 @@ describe('POST /api/checkout', () => {
         body: {},
       },
       willRespondWith: {
-        status: 200,
+        status: 400,
         headers: { 'Content-Type': regex('^application/json.*', 'application/json') },
-        body: {},
+        body: {
+          error: MatchersV3.string('Missing required fields'),
+        },
       },
     });
 
     await provider.executeTest(async (mockServer) => {
-      const response = await axios.post(
-        `${mockServer.url}/api/checkout`,
-        {},
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer mock-token',
-          },
-        }
-      );
-      expect(response.status).toEqual(200);
+      try {
+        await axios.post(
+          `${mockServer.url}/api/checkout`,
+          {},
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer mock-token',
+            },
+          }
+        );
+      } catch (error) {
+        expect(error.response.status).toEqual(400);
+        expect(error.response.data).toHaveProperty('error');
+      }
     });
   });
 
@@ -264,24 +282,30 @@ describe('POST /api/checkout', () => {
         },
       },
       willRespondWith: {
-        status: 200,
+        status: 400,
         headers: { 'Content-Type': regex('^application/json.*', 'application/json') },
-        body: {},
+        body: {
+          error: MatchersV3.string('Invalid total_amount'),
+        },
       },
     });
 
     await provider.executeTest(async (mockServer) => {
-      const response = await axios.post(
-        `${mockServer.url}/api/checkout`,
-        { total_amount: -50000, shipping_address: '...' },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer mock-token',
-          },
-        }
-      );
-      expect(response.status).toEqual(200);
+      try {
+        await axios.post(
+          `${mockServer.url}/api/checkout`,
+          { total_amount: -50000, shipping_address: '...' },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer mock-token',
+            },
+          }
+        );
+      } catch (error) {
+        expect(error.response.status).toEqual(400);
+        expect(error.response.data).toHaveProperty('error');
+      }
     });
   });
 });
